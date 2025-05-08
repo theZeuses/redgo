@@ -15,7 +15,7 @@ type Aof struct {
 }
 
 func NewAof(path string) (*Aof, error) {
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
 
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (a *Aof) Read() error {
 			return err
 		}
 
-		ProcessCommand(value.(ArrayValue).Val[0].(StringValue).Val, value.(ArrayValue).Val[1:], nil)
+		ProcessCommand(value.(ArrayValue).Val[0].(BulkStringValue).Val, value.(ArrayValue).Val[1:], nil)
 	}
 
 	return nil
@@ -84,7 +84,7 @@ func (a *Aof) Close() {
 
 func InitAof() (*Aof, error) {
 	fmt.Println("Loading AOF file....")
-	aof, err := NewAof("data/database.aof")
+	aof, err := NewAof("database.aof")
 	if err != nil {
 		return nil, err
 	}
