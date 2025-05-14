@@ -72,6 +72,10 @@ func (p *Reader) parseBulkStr() (Value, error) {
 		return val, err
 	}
 
+	if len == -1 {
+		return NullValue{}, nil
+	}
+
 	bulk := make([]byte, len)
 	_, errDuringRead := p.reader.Read(bulk)
 
