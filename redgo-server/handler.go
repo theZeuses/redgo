@@ -8,6 +8,7 @@ import (
 var Handlers = map[string]func([]Value, *Client) Value{
 	"PING":        ping,
 	"SET":         set,
+	"DEL":         del,
 	"GET":         get,
 	"HSET":        hset,
 	"HGET":        hget,
@@ -64,7 +65,7 @@ func Handle(client Client, aof *Aof) error {
 
 			response := ProcessCommand(command, args, &client)
 
-			if command == "SET" || command == "HSET" {
+			if command == "SET" || command == "HSET" || command == "DEL" {
 				aof.Write(value)
 			}
 

@@ -32,3 +32,21 @@ func get(args []Value, _ *Client) Value {
 
 	return NullValue{}
 }
+
+func del(args []Value, _ *Client) Value {
+	if len(args) != 1 {
+		return ErrorValue{Val: "ERR wrong number of arguments for 'del' command"}
+	}
+
+	key := args[0].(BulkStringValue).Val
+
+	SETsMutex.Lock()
+	defer SETsMutex.Unlock()
+
+	if _, found := SETs[key]; found {
+		delete(SETs, key)
+		return IntegerValue{Val: 1}
+	}
+
+	return IntegerValue{Val: 0}
+}
